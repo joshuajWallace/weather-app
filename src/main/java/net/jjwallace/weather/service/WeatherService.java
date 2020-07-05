@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import net.jjwallace.weather.model.City;
-import net.jjwallace.weather.model.DataSet;
+import net.jjwallace.weather.DTO.City;
+import net.jjwallace.weather.DTO.CurrentDataSet;
 
 @Service
 public interface WeatherService {
@@ -16,6 +16,6 @@ public interface WeatherService {
 
 	public List<City> getNames(String country);
 
-	public DataSet getCurrentData(int id);
+	public CurrentDataSet getCurrentData(int id);
 
 }

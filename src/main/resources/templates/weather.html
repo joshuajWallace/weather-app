@@ -1,10 +1,14 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" 	
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org"
+    layout:decorate="~{fragments/layout}">
 <head>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script src="https://kit.fontawesome.com/86c8b7e53b.js" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 		//auto populate city names for each country as well as id for return value
 		function getCities(){
@@ -22,6 +26,7 @@
 				   	option.value =  myObj[x].id;
 				    document.getElementById("city").add(option);
 			    }
+			    document.getElementById('name').value=(document.getElementById("city").options[document.getElementById("city").selectedIndex].text);
 			  }
 			}
 			xmlhttp.open("POST", "/cities", true);
@@ -32,42 +37,15 @@
 	<meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     
+    <title>Weather</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}"/>
-<title>Weather</title>
 </head>
 <body>
-    <nav class="navbar navbar-dark  navbar-expand-lg">
-		<div class="container-fluid">
-            <div class="container-fluid">
-            <a th:href="@{/}">Home</a>
-            </div>
-            <div class="row">
-		    	<form action="#" th:acton="@{/city}"  th:object="${newCity}"  method="post">
-					<div class="row">
-						<input th:field="*{name}" id="name">
-						<label>Country Code:</label>
-						<select class="form-control" th:field="*{country}" id="country" onchange="getCities()">
-							<option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
-						</select>
-						<label>City:</label>
-						<select class="form-control" th:field="*{id}" id="city" onchange="document.getElementById('name').value=(this.options[this.selectedIndex].text);">
-						</select>
-						
-						<input class="btn btn-primary" type="submit" value="Get Weather">
-					</div>
-		        </form>
-		    </div>
-   		</div>
-    </nav>
+<div layout:fragment="content" th:remove="tag">
     <div class="container">
     	<h2>Select a city and get the local weather now!</h2>
     </div>
-    <footer>
-        <div class="container">
-        <span>Photo by <a href="https://unsplash.com/@pericakalimerica?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Pero Kalimero</a> on <a href="https://unsplash.com/s/photos/cloud?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
-        </div>
-    </footer>
+</div>    
 </body>
-
 </html>

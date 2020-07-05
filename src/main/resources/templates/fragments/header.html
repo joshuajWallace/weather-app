@@ -1,10 +1,13 @@
-<!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html 
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.min.js/}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script src="https://kit.fontawesome.com/86c8b7e53b.js" crossorigin="anonymous"></script>
 	<script type="text/javascript">
+		//auto populate city names for each country as well as id for return value
 		function getCities(){
 			var obj, dbParam, xmlhttp, myObj, x, txt = "";
 			dbParam =  document.getElementById("country").value;
@@ -20,6 +23,7 @@
 				   	option.value =  myObj[x].id;
 				    document.getElementById("city").add(option);
 			    }
+			    document.getElementById('name').value=(document.getElementById("city").options[document.getElementById("city").selectedIndex].text);
 			  }
 			}
 			xmlhttp.open("POST", "/cities", true);
@@ -27,40 +31,43 @@
 			xmlhttp.send("country=" + dbParam);
 			};
 	</script>
+	<script type="text/javascript">
+	function getDt(){
+	var date = new Date(/*[[${currentWeatherData.dt}]]*/*1000);
+	document.getElementById("date").innerHTML = date;
+	}
+	</script>
+	<meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}"/>
+	<title th:text="${city.name} + ' Weather'"></title>
 </head>
 <body>
 <th:block th:fragment="header">
-    <nav class="navbar navbar-dark bg-dark  navbar-expand-lg">
-		<div class="container-fluid">
-            <div class="row">
-                <a class="navbar-brand" th:href="@{/}">
-                    <img th:src="@{/images/computer.png}" alt="logo"/>
-                </a>
-            </div>
-            <div class="container-fluid">
-            <a th:href="@{/}">Home</a>
-            </div>
-            <div class="row">
-		    	<form action="#"  th:object="${newCity}" th:acton="@{/city}"  method="post">
-					<div class="row">
-						<select class="form-control" th:field="*{country}" id="country" onchange="getCities()">
-							<option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
-						</select>
-						
-						<select class="form-control" th:field="*{name}" id="city">
-						</select>
-
-						<button class="btn btn-primary" type="submit">Submit form</button>
-					</div>
-		        </form>
-		    </div>
-   		</div>
-    </nav>
-</th:block>
-</body>
-<script th:src="@{/webjars/jquery/jquery-1.12.4.js"></script>
-<script th:src="@{/webjars/jquery/ui/1.12.1/jquery-ui.js"></script>
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-</html>
+	    <nav class="navbar navbar-dark  navbar-expand-lg">
+			<div class="container-fluid">
+	            <div class="container-fluid">
+	            <a th:href="@{/}">Home</a>
+	            </div>
+				    	<form action="#" th:action="@{/city}" th:object="${newCity}" method="post">
+	    							<div class="row">
+							<input type="hidden" th:field="*{name}" id="name">
+							<label>Country Code:</label>
+							<select class="form-control" th:field="*{country}" id="country" onchange="getCities()">
+								<option value="">-------</option>
+								<option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
+							</select>
+							<label>City:</label>
+							<select class="form-control"th:field="*{id}" id="city" onchange="document.getElementById('name').value=(this.options[this.selectedIndex].text);">
+							</select>
+							
+							<input class="btn btn-primary" type="submit" value="Get Weather">
+						</div>
+	    	</form>
+	   		</div>
+	    </nav>
+	    </th:block>>
+    </body>
+    </html>

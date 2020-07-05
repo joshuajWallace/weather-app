@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.jjwallace.weather.model.City;
+import net.jjwallace.weather.DTO.City;
 import net.jjwallace.weather.service.WeatherService;
 
 @RestController

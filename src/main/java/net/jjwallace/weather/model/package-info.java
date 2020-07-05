@@ -1,1 +1,0 @@
-package net.jjwallace.weather.model;

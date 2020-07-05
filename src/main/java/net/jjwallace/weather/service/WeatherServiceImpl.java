@@ -13,27 +13,26 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.jjwallace.weather.model.City;
-import net.jjwallace.weather.model.DataSet;
+import net.jjwallace.weather.DTO.City;
+import net.jjwallace.weather.DTO.CurrentDataSet;
 
 @Service
 public class WeatherServiceImpl implements WeatherService{
 	
-	private RestTemplate restTemplate;
-	
-	private String apikey = "&appid=2cc21bf26f60257606e999d3f2d2308c";
-	private String url = "api.openweathermap.org/data/2.5/weather?id=";
+	private RestTemplate restTemplate = new RestTemplate();
+	 
+	private String apikey = "&appid=2cc21bf26f60257606e999d3f2d2308c&units=metric";
+	private String url = "http://api.openweathermap.org/data/2.5/weather?id=";
 	
 	@Override
-	public DataSet getCurrentData(int id) {
-		DataSet respone = restTemplate.getForObject((url + id + apikey), DataSet.class);
-		return respone;
+	public CurrentDataSet getCurrentData(int id) {
+		return restTemplate.getForObject((url + Integer.toString(id) + apikey), CurrentDataSet.class);
 		}
 	@Override
 	public List<City> getCities(){
 		ObjectMapper map = new ObjectMapper();
 		try {
-			File src = ResourceUtils.getFile("classpath:city.list.json");
+			File src = ResourceUtils.getFile("classpath:current.city.list.json");
 			return map.readValue(src, new TypeReference<List<City>>(){});
 		} catch (Exception e) {
 			e.printStackTrace();
