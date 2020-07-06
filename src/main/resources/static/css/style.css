@@ -1,13 +1,20 @@
 body{
+	background-repeat: no-repeat;
 	background-image: url("/images/pero-kalimero-9BJRGlqoIUk-unsplash.jpg");
-	background-size: cover;
 	text-align: center;
 }
-.form-control{
-	width: 250px;
-}
 footer{
-	position: absolute;
+	position: relative;
 	bottom: 0;
-	}
-	
+	background: transparent;
+}
+form{
+	padding: 20px;
+	width: 25rem;
+}
+#lon{
+	display: none;
+}
+#lat{
+	display: none;
+}

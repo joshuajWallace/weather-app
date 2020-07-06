@@ -6,37 +6,6 @@
 	<script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 	<script src="https://kit.fontawesome.com/86c8b7e53b.js" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		//auto populate city names for each country as well as id for return value
-		function getCities(){
-			var obj, dbParam, xmlhttp, myObj, x, txt = "";
-			dbParam =  document.getElementById("country").value;
-			document.getElementById("city").innerHTML = "<option>Loading...</option>";
-			xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
-			  if (this.readyState == 4 && this.status == 200) {
-			    myObj = JSON.parse(this.responseText);
-			    document.getElementById("city").innerHTML="";
-			    for(x in myObj) {
-			    	option = document.createElement('option')
-				   	option.text = myObj[x].name;
-				   	option.value =  myObj[x].id;
-				    document.getElementById("city").add(option);
-			    }
-			    document.getElementById('name').value=(document.getElementById("city").options[document.getElementById("city").selectedIndex].text);
-			  }
-			}
-			xmlhttp.open("POST", "/cities", true);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xmlhttp.send("country=" + dbParam);
-			};
-	</script>
-	<script type="text/javascript">
-	function getDt(){
-	var date = new Date(/*[[${currentWeatherData.dt}]]*/*1000);
-	document.getElementById("date").innerHTML = date;
-	}
-	</script>
 	<meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     
@@ -48,24 +17,32 @@
 <th:block th:fragment="header">
 	    <nav class="navbar navbar-dark  navbar-expand-lg">
 			<div class="container-fluid">
-	            <div class="container-fluid">
+	            <div class="container">
 	            <a th:href="@{/}">Home</a>
 	            </div>
-				    	<form action="#" th:action="@{/city}" th:object="${newCity}" method="post">
-	    							<div class="row">
-							<input type="hidden" th:field="*{name}" id="name">
-							<label>Country Code:</label>
-							<select class="form-control" th:field="*{country}" id="country" onchange="getCities()">
-								<option value="">-------</option>
-								<option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
-							</select>
-							<label>City:</label>
-							<select class="form-control"th:field="*{id}" id="city" onchange="document.getElementById('name').value=(this.options[this.selectedIndex].text);">
-							</select>
-							
-							<input class="btn btn-primary" type="submit" value="Get Weather">
-						</div>
-	    	</form>
+				    <form action="#" th:action="@{/city}" th:object="${newCity}" method="post">
+
+		    					<div class="form-group">	
+									<input type="hidden" th:field="*{name}" id="name">
+									<select class="form-control" th:field="*{coord.lat}" id="lat">
+									</select>
+									<select class="form-control"  th:field="*{coord.lon}" id="lon">
+									</select>
+								</div>
+							<div class="form-group">
+								<label for="country">Country Code:</label>
+								<select class="form-control" th:field="*{country}" id="country" onchange="getCities()">
+									<option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>City:</label>
+								<select class="form-control" th:field="*{id}" id="city" onchange="document.getElementById('name').value=(this.options[this.selectedIndex].text); 
+								document.getElementById('lat').selectedIndex=this.selectedIndex;document.getElementById('lon').selectedIndex=this.selectedIndex;">
+								</select>
+							</div>
+						<input class="btn btn-primary" type="submit" value="Get Weather">
+	    		</form>
 	   		</div>
 	    </nav>
 	    </th:block>>

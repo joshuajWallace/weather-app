@@ -12,7 +12,7 @@
 	<script type="text/javascript">
 		//auto populate city names for each country as well as id for return value
 		function getCities(){
-			var obj, dbParam, xmlhttp, myObj, x, txt = "";
+			var obj, dbParam, xmlhttp, myObj, x, coord , txt = "";
 			dbParam =  document.getElementById("country").value;
 			document.getElementById("city").innerHTML = "<option>Loading...</option>";
 			xmlhttp = new XMLHttpRequest();
@@ -25,6 +25,14 @@
 				   	option.text = myObj[x].name;
 				   	option.value =  myObj[x].id;
 				    document.getElementById("city").add(option);
+				    optionLon = document.createElement('option');
+				    optionLon.value = myObj[x].coord.lon;
+				    optionLon.text = myObj[x].coord.lon;
+				    document.getElementById("lon").add(optionLon);
+				    optionLat = document.createElement('option');
+				    optionLat.value = myObj[x].coord.lat;
+				    optionLat.text = myObj[x].coord.lat;
+				    document.getElementById("lat").add(optionLat);
 			    }
 			    document.getElementById('name').value=(document.getElementById("city").options[document.getElementById("city").selectedIndex].text);
 			  }
@@ -41,10 +49,10 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}"/>
 </head>
-<body>
+<body onload="getCities()">
 <div layout:fragment="content" th:remove="tag">
     <div class="container">
-    	<h2>Select a city and get the local weather now!</h2>
+    	<h2>Select a city and get the local weather info</h2>
     </div>
 </div>    
 </body>
