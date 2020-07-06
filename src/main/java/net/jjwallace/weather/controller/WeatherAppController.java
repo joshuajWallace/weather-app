@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import net.jjwallace.weather.DTO.AllInOneCurrentData;
 import net.jjwallace.weather.DTO.City;
-import net.jjwallace.weather.DTO.Coordinate;
 import net.jjwallace.weather.DTO.Daily;
 import net.jjwallace.weather.DTO.WeatherRespone;
 import net.jjwallace.weather.service.WeatherService;

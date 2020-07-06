@@ -15,7 +15,7 @@ public class AllInOneCurrentData {
 	private int visibility;
 	private int humidity;
 	private List<Weather> weather;
-	private Wind wind;
+	private double windSpeed;
 	private long dt;
 }
 
