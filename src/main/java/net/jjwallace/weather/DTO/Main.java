@@ -1,7 +1,9 @@
 package net.jjwallace.weather.DTO;
 
 import lombok.Data;
-
+/*
+ * needed if calling forecast weather api's only.
+ */
 @Data
 public class Main {
 	private double feelsLike;

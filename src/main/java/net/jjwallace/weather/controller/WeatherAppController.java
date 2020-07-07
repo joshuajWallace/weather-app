@@ -17,19 +17,19 @@ import net.jjwallace.weather.service.WeatherService;
 
 @Controller
 public class WeatherAppController {
-	
+
 	@Autowired
 	private WeatherService weatherService;
-	
-	
+
+
 	@GetMapping("/")
 	public String weatherPage(Model model) {
 		model.addAttribute("newCity", new City());
 		model.addAttribute("countries", weatherService.getCountries());
 		return "weather";
 	}
-	
-	
+
+
 	@PostMapping("/city")
 	public String forCity(@ModelAttribute("newCity") City newCity, Model model) {
 		WeatherRespone weatherData = weatherService.getWeatherRespone(newCity.getCoord());

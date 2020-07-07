@@ -78,7 +78,18 @@
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>selectize.js</artifactId>
+		    <version>0.12.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>microplugin</artifactId>
+		    <version>0.0.3</version>
+		</dependency>
 	</dependencies>
+	
 
 	<build>
 		<plugins>

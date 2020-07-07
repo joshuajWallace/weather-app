@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
+/*
+ * city data pulled from json file.
+ */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class City implements Comparable<String>{

@@ -1,161 +1,187 @@
-<html 
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:th="http://www.thymeleaf.org"
-	layout:decorate="~{fragments/layout}">
-<head>
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	<script type="text/javascript">
-		//auto populate city names for each country as well as id for return value
-		function getCities(){
-			var obj, dbParam, xmlhttp, myObj, x, coord , txt = "";
-			dbParam =  document.getElementById("country").value;
-			document.getElementById("city").innerHTML = "<option>Loading...</option>";
-			xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
-			  if (this.readyState == 4 && this.status == 200) {
-			    myObj = JSON.parse(this.responseText);
-			    document.getElementById("city").innerHTML="";
-			    for(x in myObj) {
-			    	option = document.createElement('option')
-				   	option.text = myObj[x].name;
-				   	option.value =  myObj[x].id;
-				    document.getElementById("city").add(option);
-				    optionLon = document.createElement('option');
-				    optionLon.value = myObj[x].coord.lon;
-				    optionLon.text = myObj[x].coord.lon;
-				    document.getElementById("lon").add(optionLon);
-				    optionLat = document.createElement('option');
-				    optionLat.value = myObj[x].coord.lat;
-				    optionLat.text = myObj[x].coord.lat;
-				    document.getElementById("lat").add(optionLat);
-			    }
-			    document.getElementById('name').value=(document.getElementById("city").options[document.getElementById("city").selectedIndex].text);
-			  }
-			}
-			xmlhttp.open("POST", "/cities", true);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xmlhttp.send("country=" + dbParam);
-			};
-	</script>
-	<script th:inline="javascript">
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+  layout:decorate="~{fragments/layout}"
+>
+  <head>
+  <script th:inline="javascript">
 	function getDt(){
-	var dt = /*[[${currentWeatherData.dt}]]*/;
-	var date = new Date(dt*1000);
-	document.getElementById("date").innerHTML = date;
-	}
-	</script>
-	<meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}"/>
-	<title th:text="${city.name} + ' Weather'"></title>
-</head>
+		var day, x, dayId,
+		dt = /*[[${currentWeatherData.dt}]]*/,
+		date = new Date(dt*1000),
+		current = date.getDate(),
+		options= {weekday: "long"};
+		document.getElementById("date").innerHTML = date;
+		for(x = 1; x <= 7; x++){
+			date.setDate(current + x);
+			day = new Intl.DateTimeFormat('en', options).format(date);
+			dayId= "Day" + x.toString();
+			document.getElementById(dayId).innerText = day;
+		}
+    };
+    </script>    
+    <script src="https://kit.fontawesome.com/86c8b7e53b.js" crossorigin="anonymous"></script>
 
-<body onload="getCities();getDt();" >
-	<div layout:fragment="content" th:remove="tag">
-		<!-- Card -->
-			<div class="card weather-card">
-			
-			  <!-- Card content -->
-			  <div class="card-body pb-3">
-			
-			    <!-- Title -->
-			    <h4 class="card-title font-weight-bold"><span th:text="${city.name}"></span></h4>
-			    <!-- Text -->
-			    <p class="card-text" id="date"></p>
-			    <div class="d-flex justify-content-between">
-			    	Temp:
-			    	<p class="display-1 degree"><span th:text="${currentWeatherData.temp}"></span> °C</p>
-			    	<i class="fas fa-sun-o fa-5x pt-3 amber-text"></i>
-			    	Feels Like:
-			   		<p class="display-1 degree"><span th:text="${currentWeatherData.feelsLike}"></span> °C</p>
-			    	<i class="fas fa-sun-o fa-5x pt-3 amber-text"></i>
-			    </div>
-			    <div class="d-flex justify-content-between mb-4">
-			      <p><i class="fas fa-tint fa-lg text-info pr-2"></i>Humidity: <span th:text="${currentWeatherData.humidity}"></span>%</p>
-			      <p><i class="fas fa-leaf fa-lg grey-text pr-2"></i><span th:text="${currentWeatherData.windSpeed}"></span> km/h Winds</p>
-			    </div>
-			    <div class="collapse-content">			
-			      <div class="collapse" id="collapseExample">			
-			        <table class="table table-borderless table-sm mb-0">
-			          <tbody>
-			            <tr>
-			              <td class="font-weight-normal align-middle">Tuesday</td>
-			              <td class="float-right font-weight-normal">
-			                <p class="mb-1">24&deg;<span class="text-muted">/12&deg;</span></p>
-			              </td>
-			              <td class="float-right mr-3">
-			                <i class="fas fa-sun fa-lg amber-text"></i>
-			              </td>
-			            </tr>
-			            <tr>
-			              <td class="font-weight-normal align-middle">Wednesday</td>
-			              <td class="float-right font-weight-normal">
-			                <p class="mb-1">19&deg;<span class="text-muted">/10&deg;</span></p>
-			              </td>
-			              <td class="float-right mr-3">
-			                <i class="fas fa-cloud-sun-rain fa-lg text-info"></i>
-			              </td>
-			            </tr>
-			            <tr>
-			              <td class="font-weight-normal align-middle">Thursday</td>
-			              <td class="float-right font-weight-normal">
-			                <p class="mb-1">23&deg;<span class="text-muted">/15&deg;</span></p>
-			              </td>
-			              <td class="float-right mr-3">
-			                <i class="fas fa-sun fa-lg amber-text"></i>
-			              </td>
-			            </tr>
-			            <tr>
-			              <td class="font-weight-normal align-middle">Friday</td>
-			              <td class="float-right font-weight-normal">
-			                <p class="mb-1">26&deg;<span class="text-muted">/19&deg;</span></p>
-			              </td>
-			              <td class="float-right mr-3">
-			                <i class="fas fa-sun fa-lg amber-text"></i>
-			              </td>
-			            </tr>
-			            <tr>
-			              <td class="font-weight-normal align-middle">Saturday</td>
-			              <td class="float-right font-weight-normal">
-			                <p class="mb-1">20&deg;<span class="text-muted">/16&deg;</span></p>
-			              </td>
-			              <td class="float-right mr-3">
-			                <i class="fas fa-cloud fa-lg text-info"></i>
-			              </td>
-			            </tr>
-			            <tr>
-			              <td class="font-weight-normal align-middle">Sunday</td>
-			              <td class="float-right font-weight-normal">
-			                <p class="mb-1">22&deg;<span class="text-muted">/13&deg;</span></p>
-			              </td>
-			              <td class="float-right mr-3">
-			                <i class="fas fa-cloud-sun fa-lg text-info"></i>
-			              </td>
-			            </tr>
-			          </tbody>
-			        </table>
-			
-			      </div>
-			
-			      <hr class="">
-			
-			        <a class="btn btn-flat red-text p-1 my-1 mr-0 mml-1 deep-purple-text collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">View Week Ahead</a>
-			
-			    </div>
-			
-			  </div>
-			
-			</div>
-	</div>
-	<footer>
-        <div class="container">
-        	<span>Photo by <a href="https://unsplash.com/@pericakalimerica?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Pero Kalimero</a> on <a href="https://unsplash.com/s/photos/cloud?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
+    <link
+      rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q" crossorigin="anonymous"/>
+    <title th:text="${city.name} "></title>
+  </head>
+
+  <body onload="getCities();getDt();">
+    <div layout:fragment="content" th:remove="tag">
+      <!-- Card -->
+      <div class="card weather-card">
+        <!-- Card content -->
+        <div class="card-body pb-3">
+          <!-- Title -->
+          <h4 class="card-title font-weight-bold">
+            <span th:text="${city.name}"></span>
+            <img class="currentIcon" th:src ="'http://openweathermap.org/img/wn/' + ${currentWeatherData.weather[0].icon} + '@2x.png'" alt="weatherIcon"/>
+          </h4>
+          <!-- Text -->
+          <p class="card-text" id="date"></p>
+          <div class="d-flex justify-content-between">
+            Temp:
+            <p class="display-1 degree">
+              <span th:text="${currentWeatherData.temp}"></span> &deg;C
+            </p>
+            <i class="fas fa-sun-o fa-5x pt-3 amber-text"></i>
+            Feels Like:
+            <p class="display-1 degree">
+              <span th:text="${currentWeatherData.feelsLike}"></span> &deg;C
+            </p>
+            <i class="fas fa-sun-o fa-5x pt-3 amber-text"></i>
+          </div>
+          <div class="d-flex justify-content-between mb-4">
+            <p>
+              <i class="fas fa-tint fa-lg text-info pr-2"></i>Humidity:
+              <span th:text="${currentWeatherData.humidity}"></span>%
+            </p>
+            <p>
+              <i class="fas fa-leaf fa-lg grey-text pr-2"></i
+              ><span th:text="${currentWeatherData.windSpeed}"></span> km/h
+              Winds
+            </p>
+          </div>
+          <div class="collapse-content">
+            <div class="collapse" id="collapseExample">
+              <table class="table table-borderless table-sm mb-0">
+                <tbody>
+                  <tr>
+                    <td
+                      class="font-weight-normal align-middle"
+                      id="Day1"
+                    ></td>
+                    <td class="float-right font-weight-normal">
+                      <p class="mb-1">
+                        <span th:text="${daily[0].temp.max}"></span>&deg;<span class="text-muted" th:text="'/' + ${daily[0].temp.min}"></span>
+                      </p>
+                    </td>
+                    <td class="float-right mr-3">
+                      <img th:src ="'http://openweathermap.org/img/wn/' + ${daily[0].weather[0].icon} + '.png'"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class="font-weight-normal align-middle"
+                      id="Day2"
+                    ></td>
+                    <td class="float-right font-weight-normal">
+                      <p class="mb-1">
+                        <span th:text="${daily[1].temp.max}"></span>&deg;<span class="text-muted" th:text="'/' + ${daily[1].temp.min}"></span>
+                      </p>
+                    </td>
+                    <td class="float-right mr-3">
+                      <img th:src ="'http://openweathermap.org/img/wn/' + ${daily[1].weather[0].icon} + '.png'"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class="font-weight-normal align-middle"
+                      id="Day3"
+                    ></td>
+                    <td class="float-right font-weight-normal">
+                      <p class="mb-1">
+                        <span th:text="${daily[2].temp.max}"></span>&deg;<span class="text-muted" th:text="'/' + ${daily[2].temp.min}"></span>
+                      </p>
+                    </td>
+                    <td class="float-right mr-3">
+                      <img th:src ="'http://openweathermap.org/img/wn/' + ${daily[2].weather[0].icon} + '.png'"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class="font-weight-normal align-middle"
+                      id="Day4"
+                    ></td>
+                    <td class="float-right font-weight-normal">
+                      <p class="mb-1">
+                       <span th:text="${daily[3].temp.max}"></span>&deg;<span class="text-muted" th:text="'/' + ${daily[3].temp.min}"></span>
+                      </p>
+                    </td>
+                    <td class="float-right mr-3">
+                      <img th:src ="'http://openweathermap.org/img/wn/' + ${daily[3].weather[0].icon} + '.png'"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class="font-weight-normal align-middle"
+                      id="Day5"
+                    ></td>
+                    <td class="float-right font-weight-normal">
+                      <p class="mb-1">
+                        <span th:text="${daily[4].temp.max}"></span>&deg;<span class="text-muted" th:text="'/' + ${daily[4].temp.min}"></span>
+                      </p>
+                    </td>
+                    <td class="float-right mr-3">
+                      <img th:src ="'http://openweathermap.org/img/wn/' + ${daily[4].weather[0].icon} + '.png'"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class="font-weight-normal align-middle"
+                      id="Day6"
+                    ></td>
+                    <td class="float-right font-weight-normal">
+                      <p class="mb-1">
+                        <span th:text="${daily[5].temp.max}"></span>&deg;<span class="text-muted" th:text="'/' + ${daily[5].temp.min}"></span>
+                      </p>
+                    </td>
+                    <td class="float-right mr-3">
+                      <img th:src ="'http://openweathermap.org/img/wn/' + ${daily[5].weather[0].icon} + '.png'"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class="font-weight-normal align-middle"
+                      id="Day7"
+                    ></td>
+                    <td class="float-right font-weight-normal">
+                      <p class="mb-1">
+                        <span th:text="${daily[6].temp.max}"></span>&deg;<span class="text-muted" th:text="'/' + ${daily[6].temp.min}"></span>
+                      </p>
+                    </td>
+                    <td class="float-right mr-3">
+                      <img  th:src ="'http://openweathermap.org/img/wn/' + ${daily[6].weather[0].icon} + '.png'"/>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <hr class="" />
+
+            <a
+              class="btn btn-flat red-text p-1 my-1 mr-0 mml-1 deep-purple-text collapsed"
+              data-toggle="collapse"
+              href="#collapseExample"
+              aria-expanded="false"
+              aria-controls="collapseExample"
+              >View Week Ahead</a
+            >
+          </div>
         </div>
-    </footer>
-</body>
+      </div>
+    </div>
+  </body>
 </html>

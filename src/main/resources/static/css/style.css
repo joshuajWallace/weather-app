@@ -18,3 +18,10 @@ form{
 #lat{
 	display: none;
 }
+.font-weight-normal {
+	font-weight: 400 !important;
+	width: 4rem;
+	text-align: center;
+	position: relative;
+	top: 0.5rem;
+}

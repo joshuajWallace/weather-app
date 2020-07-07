@@ -19,54 +19,54 @@ import net.jjwallace.weather.DTO.CurrentDataSet;
 import net.jjwallace.weather.DTO.WeatherRespone;
 
 @Service
-public class WeatherServiceImpl implements WeatherService{
-	
+public class WeatherServiceImpl implements WeatherService {
+
 	private RestTemplate restTemplate = new RestTemplate();
-	 
+
 	private String apikey = "&appid=2cc21bf26f60257606e999d3f2d2308c&units=metric";
 	private String currentUrl = "http://api.openweathermap.org/data/2.5/weather?id=";
 	private String allInOneUrl = "https://api.openweathermap.org/data/2.5/onecall?";
 	private String latitudeTag = "lat=";
 	private String longitudeTag = "&lon=";
-	private String exculde = "&exclude=minutely,hourly,daily";
-	
+	private String exculde = "&exclude=minutely,hourly";
+
 	@Override
 	public CurrentDataSet getCurrentData(int id) {
 		String url = (currentUrl + Integer.toString(id) + apikey);
 		return restTemplate.getForObject(url, CurrentDataSet.class);
-		}
-	
+	}
+
 	@Override
 	public WeatherRespone getWeatherRespone(Coordinate coord) {
 		String url = (allInOneUrl + latitudeTag + coord.getLat() + longitudeTag + coord.getLon() + exculde + apikey);
 		return restTemplate.getForObject(url, WeatherRespone.class);
 	}
 
-	
 	@Override
-	public List<City> getCities(){
+	public List<City> getCities() {
 		ObjectMapper map = new ObjectMapper();
 		try {
-			File src = ResourceUtils.getFile("classpath:city.list.json");
+			File src = ResourceUtils.getFile("classpath:current.city.list.json");
+			System.out.println(src.exists());
 			return Arrays.asList(map.readValue(src, City[].class));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	public List<String> getCountries(){
+
+	public List<String> getCountries() {
 		List<String> countries = new ArrayList<String>();
-		for(City city :  getCities())
-			if(!countries.contains(city.getCountry()))
+		for (City city : getCities())
+			if (!countries.contains(city.getCountry()))
 				countries.add(city.getCountry());
 		return countries.stream().sorted().collect(Collectors.toList());
 	}
-	
-	public List<City> getNames(String country){
+
+	public List<City> getNames(String country) {
 		List<City> withCountry = new ArrayList<City>();
-		for(City city : getCities())
-			if(city.getCountry().equals(country))
+		for (City city : getCities())
+			if (city.getCountry().equals(country))
 				withCountry.add(city);
 		withCountry.sort(Comparator.comparing(City::getName));
 		return withCountry;

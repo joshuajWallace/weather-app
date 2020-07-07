@@ -4,50 +4,7 @@
     xmlns:th="http://www.thymeleaf.org"
     layout:decorate="~{fragments/layout}">
 <head>
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	<script src="https://kit.fontawesome.com/86c8b7e53b.js" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		//auto populate city names for each country as well as id for return value
-		function getCities(){
-			var obj, dbParam, xmlhttp, myObj, x, coord , txt = "";
-			dbParam =  document.getElementById("country").value;
-			document.getElementById("city").innerHTML = "<option>Loading...</option>";
-			xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
-			  if (this.readyState == 4 && this.status == 200) {
-			    myObj = JSON.parse(this.responseText);
-			    document.getElementById("city").innerHTML="";
-			    for(x in myObj) {
-			    	option = document.createElement('option')
-				   	option.text = myObj[x].name;
-				   	option.value =  myObj[x].id;
-				    document.getElementById("city").add(option);
-				    optionLon = document.createElement('option');
-				    optionLon.value = myObj[x].coord.lon;
-				    optionLon.text = myObj[x].coord.lon;
-				    document.getElementById("lon").add(optionLon);
-				    optionLat = document.createElement('option');
-				    optionLat.value = myObj[x].coord.lat;
-				    optionLat.text = myObj[x].coord.lat;
-				    document.getElementById("lat").add(optionLat);
-			    }
-			    document.getElementById('name').value=(document.getElementById("city").options[document.getElementById("city").selectedIndex].text);
-			  }
-			}
-			xmlhttp.open("POST", "/cities", true);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xmlhttp.send("country=" + dbParam);
-			};
-	</script>
-	<meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    
-    <title>Weather</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}"/>
+	<title>Select</title>
 </head>
 <body onload="getCities()">
 <div layout:fragment="content" th:remove="tag">

@@ -1,17 +1,6 @@
 <html 
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	<script src="https://kit.fontawesome.com/86c8b7e53b.js" crossorigin="anonymous"></script>
-	<meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}"/>
-	<title th:text="${city.name} + ' Weather'"></title>
 </head>
 <body>
 <th:block th:fragment="header">
