@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +23,8 @@ import net.jjwallace.weather.DTO.WeatherRespone;
 public class WeatherServiceImpl implements WeatherService {
 
 	private RestTemplate restTemplate = new RestTemplate();
-
-	private String apikey = "&appid=2cc21bf26f60257606e999d3f2d2308c&units=metric";
+	@Value("${weatherapikey}")
+	private String apikey;
 	private String currentUrl = "http://api.openweathermap.org/data/2.5/weather?id=";
 	private String allInOneUrl = "https://api.openweathermap.org/data/2.5/onecall?";
 	private String latitudeTag = "lat=";
